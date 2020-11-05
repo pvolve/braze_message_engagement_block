@@ -11,12 +11,12 @@ view: push_messaging_frequency {
       FROM DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_SEND_SHARED  as sends
       LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_BOUNCE_SHARED  as bounces ON (sends.user_id)=(bounces.user_id)
                   AND
-                  ((sends.message_variation_id)=(bounces.message_variation_id)
+                  ((sends.message_variation_api_id)=(bounces.message_variation_api_id)
                   OR
                   (sends.canvas_step_id)=(bounces.canvas_step_id))
       LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_OPEN_SHARED  as opens ON (sends.user_id)=(opens.user_id)
                   AND
-                  ((sends.message_variation_id)=(opens.message_variation_id)
+                  ((sends.message_variation_api_id)=(opens.message_variation_api_id)
                   OR
                   (sends.canvas_step_id)=(opens.canvas_step_id))
       WHERE
@@ -24,7 +24,7 @@ view: push_messaging_frequency {
       AND
       {% condition canvas_name %} sends.canvas_name {% endcondition %}
       AND
-      {% condition message_variation_id %} sends.message_variation_id {% endcondition %}
+      {% condition message_variation_api_id %} sends.message_variation_api_id {% endcondition %}
       AND
       {% condition canvas_name %} sends.canvas_step_id {% endcondition %}
       AND

@@ -4,7 +4,7 @@ view: email_messaging_cadence {
     sql: with deliveries as
       (select TO_TIMESTAMP(time) AS delivered_timestamp,
       email_address AS delivered_address,
-      message_variation_id as d_message_variation_id,
+      message_variation_api_id as d_message_variation_api_id,
       canvas_step_id as d_canvas_step_id,
       campaign_name as d_campaign_name,
       canvas_name as d_canvas_name,
@@ -17,23 +17,23 @@ view: email_messaging_cadence {
 
       opens as
       (select distinct email_address as open_address,
-      message_variation_id as o_message_variation_id,
+      message_variation_api_id as o_message_variation_api_id,
       canvas_step_id as o_canvas_step_id
       FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_OPEN_SHARED),
 
       clicks as
       (select distinct email_address as click_address,
-      message_variation_id as c_message_variation_id,
+      message_variation_api_id as c_message_variation_api_id,
       canvas_step_id as c_canvas_step_id
       FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED)
 
       SELECT * FROM deliveries
       LEFT JOIN opens
       ON (deliveries.delivered_address)=(opens.open_address)
-      AND ((deliveries.d_message_variation_id)=(opens.o_message_variation_id) OR (deliveries.d_canvas_step_id)=(opens.o_canvas_step_id))
+      AND ((deliveries.d_message_variation_api_id)=(opens.o_message_variation_api_id) OR (deliveries.d_canvas_step_id)=(opens.o_canvas_step_id))
       LEFT JOIN clicks
       ON (deliveries.delivered_address)=(clicks.click_address)
-      AND ((deliveries.d_message_variation_id)=(clicks.c_message_variation_id) OR (deliveries.d_canvas_step_id)=(clicks.c_canvas_step_id))
+      AND ((deliveries.d_message_variation_api_id)=(clicks.c_message_variation_api_id) OR (deliveries.d_canvas_step_id)=(clicks.c_canvas_step_id))
       ;;
   }
 

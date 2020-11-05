@@ -95,7 +95,7 @@ view: users_messages_email_open {
     description: "id of the message variation if from a campaign"
     hidden: yes
     type: string
-    sql: ${TABLE}."MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."MESSAGE_VARIATION_API_ID" ;;
   }
 
   dimension: send_id {
@@ -135,7 +135,7 @@ view: users_messages_email_open {
   measure: email_unique_opens_mvid {
     type: count_distinct
     hidden: yes
-    sql: ${TABLE}."EMAIL_ADDRESS", ${TABLE}."MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."EMAIL_ADDRESS", ${TABLE}."MESSAGE_VARIATION_API_ID" ;;
   }
 
   measure: email_unique_opens_csid {

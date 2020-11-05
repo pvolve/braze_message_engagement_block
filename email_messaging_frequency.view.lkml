@@ -7,20 +7,20 @@ view: email_messaging_frequency {
         count(distinct deliveries.id ) over (partition by delivered_time, delivered_address) AS frequency,
         row_number() over (partition by delivered_address, delivered_time order by delivered_time) as rank,
         opens.email_address as opened_address,
-        opens.message_variation_id as opened_mv_id,
+        opens.message_variation_api_id as opened_mv_id,
         opens.canvas_step_id as opened_cs_id,
         clicks.email_address as clicked_address,
-        clicks.message_variation_id as clicked_mv_id,
+        clicks.message_variation_api_id as clicked_mv_id,
         clicks.canvas_step_id as clicked_cs_id
         FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_DELIVERY_SHARED  AS deliveries
         LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_EMAIL_OPEN_SHARED  AS opens ON (deliveries.email_address)=(opens.email_address)
                     AND
-                    ((deliveries.message_variation_id)=(opens.message_variation_id)
+                    ((deliveries.message_variation_api_id)=(opens.message_variation_api_id)
                     OR
                     (deliveries.canvas_step_id)=(opens.canvas_step_id))
         LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED  AS clicks ON (deliveries.email_address)=(clicks.email_address)
                     AND
-                    ((deliveries.message_variation_id)=(clicks.message_variation_id)
+                    ((deliveries.message_variation_api_id)=(clicks.message_variation_api_id)
                     OR
                     (deliveries.canvas_step_id)=(clicks.canvas_step_id))
       WHERE
@@ -28,7 +28,7 @@ view: email_messaging_frequency {
       AND
       {% condition canvas_name %} deliveries.canvas_name {% endcondition %}
       AND
-      {% condition message_variation_id %} deliveries.message_variation_id {% endcondition %}
+      {% condition message_variation_api_id %} deliveries.message_variation_api_id {% endcondition %}
       AND
       {% condition canvas_name %} deliveries.canvas_step_id {% endcondition %}
       ;;

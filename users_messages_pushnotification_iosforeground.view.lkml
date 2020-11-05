@@ -77,7 +77,7 @@ view: users_messages_pushnotification_iosforeground {
     description: "id of the message variation if from a campaign"
     hidden: yes
     type: string
-    sql: ${TABLE}."MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."MESSAGE_VARIATION_API_ID" ;;
   }
 
   dimension: platform {

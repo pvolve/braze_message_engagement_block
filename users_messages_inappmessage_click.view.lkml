@@ -122,7 +122,7 @@ view: users_messages_inappmessage_click {
     description: "id of the message variation if from a campaign"
     hidden: yes
     type: string
-    sql: ${TABLE}."MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."MESSAGE_VARIATION_API_ID" ;;
   }
 
   dimension: os_version {

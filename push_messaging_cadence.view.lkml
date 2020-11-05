@@ -4,7 +4,7 @@ view: push_messaging_cadence {
     sql: select to_timestamp(sends.time) as send_timestamp,
       sends.user_id as send_user_id,
       bounces.user_id as bounce_user_id,
-      sends.message_variation_id as s_message_variation_id,
+      sends.message_variation_api_id as s_message_variation_api_id,
       sends.canvas_step_id as s_canvas_step_id,
       sends.campaign_name as s_campaign_name,
       sends.canvas_name as s_canvas_name,
@@ -23,14 +23,14 @@ LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_OPEN_SHARED AS opens 
             AND
             (sends.device_id)=(opens.device_id)
             AND
-            ((sends.message_variation_id)=(opens.message_variation_id)
+            ((sends.message_variation_api_id)=(opens.message_variation_api_id)
             OR
             (sends.canvas_step_id)=(opens.canvas_step_id))
 LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_BOUNCE_SHARED AS bounces ON (sends.user_id)=(bounces.user_id)
             AND
             (sends.device_id)=(bounces.device_id)
             AND
-            ((sends.message_variation_id)=(bounces.message_variation_id)
+            ((sends.message_variation_api_id)=(bounces.message_variation_api_id)
             OR
             (sends.canvas_step_id)=(bounces.canvas_step_id)) ;;
   }

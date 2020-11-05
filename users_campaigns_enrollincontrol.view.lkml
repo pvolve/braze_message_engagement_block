@@ -66,7 +66,7 @@ view: users_campaigns_enrollincontrol {
     description: "id of the message variation"
     hidden: yes
     type: string
-    sql: ${TABLE}."MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."MESSAGE_VARIATION_API_ID" ;;
   }
 
   dimension: send_id {

@@ -107,7 +107,7 @@ view: users_messages_inappmessage_impression {
   dimension: message_variation_id {
     description: "id of the message variation if from a campaign"
     type: string
-    sql: ${TABLE}."MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."MESSAGE_VARIATION_API_ID" ;;
   }
 
   dimension: os_version {

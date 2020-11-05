@@ -95,7 +95,7 @@ view: users_messages_email_markasspam {
     description: "id of the message variation if from a campaign"
     hidden: yes
     type: string
-    sql: ${TABLE}."MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."MESSAGE_VARIATION_API_ID" ;;
   }
 
   dimension: send_id {
