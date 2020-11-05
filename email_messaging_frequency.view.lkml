@@ -28,7 +28,7 @@ view: email_messaging_frequency {
       AND
       {% condition canvas_name %} deliveries.canvas_name {% endcondition %}
       AND
-      {% condition message_variation_api_id %} deliveries.message_variation_api_id {% endcondition %}
+      {% condition message_variation_id %} deliveries.message_variation_api_id {% endcondition %}
       AND
       {% condition canvas_name %} deliveries.canvas_step_id {% endcondition %}
       ;;

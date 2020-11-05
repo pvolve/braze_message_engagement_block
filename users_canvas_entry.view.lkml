@@ -35,7 +35,7 @@ view: users_canvas_entry {
     description: "id of the Canvas variation the user is in"
     hidden: yes
     type: string
-    sql: ${TABLE}."CANVAS_VARIATION_ID" ;;
+    sql: ${TABLE}."CANVAS_VARIATION_API_ID" ;;
   }
 
   dimension_group: entered_canvas_time {

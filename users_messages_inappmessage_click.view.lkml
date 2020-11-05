@@ -62,7 +62,7 @@ view: users_messages_inappmessage_click {
     description: "id of the Canvas variation the user is in if from a Canvas"
     hidden: yes
     type: string
-    sql: ${TABLE}."CANVAS_VARIATION_ID" ;;
+    sql: ${TABLE}."CANVAS_VARIATION_API_ID" ;;
   }
 
   dimension: card_id {

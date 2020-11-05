@@ -37,7 +37,7 @@ view: users_canvas_conversion {
   dimension: canvas_variation_id {
     description: "id of the Canvas variation the user is in"
     type: string
-    sql: ${TABLE}."CANVAS_VARIATION_ID" ;;
+    sql: ${TABLE}."CANVAS_VARIATION_API_ID" ;;
   }
 
 # the below dimensions use Snowflake syntax to turn a json string into code that can be queried.

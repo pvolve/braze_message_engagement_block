@@ -51,7 +51,7 @@ LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_BOUNCE_SHARED AS boun
   dimension: message_variation_id {
     description: "message variation id if from a campaign"
     type: string
-    sql: ${TABLE}."S_MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."S_MESSAGE_VARIATION_API_ID" ;;
   }
 
   dimension: canvas_step_id {

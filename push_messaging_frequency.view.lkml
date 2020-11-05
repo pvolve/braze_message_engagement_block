@@ -24,7 +24,7 @@ view: push_messaging_frequency {
       AND
       {% condition canvas_name %} sends.canvas_name {% endcondition %}
       AND
-      {% condition message_variation_api_id %} sends.message_variation_api_id {% endcondition %}
+      {% condition message_variation_id %} sends.message_variation_api_id {% endcondition %}
       AND
       {% condition canvas_name %} sends.canvas_step_id {% endcondition %}
       AND

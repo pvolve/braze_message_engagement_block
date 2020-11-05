@@ -43,7 +43,7 @@ view: users_messages_webhook_send {
   dimension: canvas_variation_id {
     description: "id of the Canvas variation the user is in if from a Canvas"
     type: string
-    sql: ${TABLE}."CANVAS_VARIATION_ID" ;;
+    sql: ${TABLE}."CANVAS_VARIATION_API_ID" ;;
   }
 
   dimension: external_user_id {

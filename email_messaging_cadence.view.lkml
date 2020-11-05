@@ -86,7 +86,7 @@ view: email_messaging_cadence {
   dimension: message_variation_id {
     description: "message variation ID if from a campaign"
     type: string
-    sql: ${TABLE}."D_MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."D_MESSAGE_VARIATION_API_ID" ;;
   }
 
   dimension_group: delivery {
@@ -139,14 +139,14 @@ view: email_messaging_cadence {
   measure: unique_clicks {
     description: "distinct count of campaigns/canvases clicked per email address; may differ by less than 1% due to inability to link exact instances of emails delivered to emails clicked"
     type: number
-    sql: count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_MESSAGE_VARIATION_ID")
+    sql: count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_MESSAGE_VARIATION_API_ID")
     +count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_CANVAS_STEP_ID") ;;
   }
 
   measure: unique_opens {
     description: "distinct count of campaigns/canvases opened per email address; may differ by less than 1% due to inability to link exact instances of emails delivered to emails opened"
     type: number
-    sql: count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_MESSAGE_VARIATION_ID")
+    sql: count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_MESSAGE_VARIATION_API_ID")
     +count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_CANVAS_STEP_ID") ;;
   }
 
