@@ -28,7 +28,7 @@ view: users_canvas_entry {
     description: "id of the canvas step"
     hidden: yes
     type: string
-    sql: ${TABLE}."CANVAS_STEP_ID" ;;
+    sql: ${TABLE}."CANVAS_STEP_API_ID" ;;
   }
 
   dimension: canvas_variation_id {

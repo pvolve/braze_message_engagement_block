@@ -5,7 +5,7 @@ view: push_messaging_cadence {
       sends.user_id as send_user_id,
       bounces.user_id as bounce_user_id,
       sends.message_variation_api_id as s_message_variation_api_id,
-      sends.canvas_step_id as s_canvas_step_id,
+      sends.canvas_step_api_id as s_canvas_step_api_id,
       sends.campaign_name as s_campaign_name,
       sends.canvas_name as s_canvas_name,
       sends.platform as s_platform,
@@ -25,14 +25,14 @@ LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_OPEN_SHARED AS opens 
             AND
             ((sends.message_variation_api_id)=(opens.message_variation_api_id)
             OR
-            (sends.canvas_step_id)=(opens.canvas_step_id))
+            (sends.canvas_step_api_id)=(opens.canvas_step_api_id))
 LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_BOUNCE_SHARED AS bounces ON (sends.user_id)=(bounces.user_id)
             AND
             (sends.device_id)=(bounces.device_id)
             AND
             ((sends.message_variation_api_id)=(bounces.message_variation_api_id)
             OR
-            (sends.canvas_step_id)=(bounces.canvas_step_id)) ;;
+            (sends.canvas_step_api_id)=(bounces.canvas_step_api_id)) ;;
   }
 
   dimension_group: send {
@@ -57,7 +57,7 @@ LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_BOUNCE_SHARED AS boun
   dimension: canvas_step_id {
     description: "canvas step id if from a canvas"
     type: string
-    sql: ${TABLE}."S_CANVAS_STEP_ID" ;;
+    sql: ${TABLE}."S_CANVAS_STEP_API_ID" ;;
   }
 
   dimension: campaign_name {

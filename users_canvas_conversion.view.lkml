@@ -31,7 +31,7 @@ view: users_canvas_conversion {
   dimension: canvas_step_id {
     description: "id of the canvas step"
     type: string
-    sql: ${TABLE}."CANVAS_STEP_ID" ;;
+    sql: ${TABLE}."CANVAS_STEP_API_ID" ;;
   }
 
   dimension: canvas_variation_id {

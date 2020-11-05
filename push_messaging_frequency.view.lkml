@@ -13,12 +13,12 @@ view: push_messaging_frequency {
                   AND
                   ((sends.message_variation_api_id)=(bounces.message_variation_api_id)
                   OR
-                  (sends.canvas_step_id)=(bounces.canvas_step_id))
+                  (sends.canvas_step_api_id)=(bounces.canvas_step_api_id))
       LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_OPEN_SHARED  as opens ON (sends.user_id)=(opens.user_id)
                   AND
                   ((sends.message_variation_api_id)=(opens.message_variation_api_id)
                   OR
-                  (sends.canvas_step_id)=(opens.canvas_step_id))
+                  (sends.canvas_step_api_id)=(opens.canvas_step_api_id))
       WHERE
       {% condition campaign_name %} sends.campaign_name {% endcondition %}
       AND

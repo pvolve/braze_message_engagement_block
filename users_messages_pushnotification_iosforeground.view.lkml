@@ -49,7 +49,7 @@ view: users_messages_pushnotification_iosforeground {
     description: "id of the step for this message if from a Canvas"
     hidden: yes
     type: string
-    sql: ${TABLE}."CANVAS_STEP_ID" ;;
+    sql: ${TABLE}."CANVAS_STEP_API_ID" ;;
   }
 
   dimension: canvas_variation_id {

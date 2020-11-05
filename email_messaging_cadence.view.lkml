@@ -5,7 +5,7 @@ view: email_messaging_cadence {
       (select TO_TIMESTAMP(time) AS delivered_timestamp,
       email_address AS delivered_address,
       message_variation_api_id as d_message_variation_api_id,
-      canvas_step_id as d_canvas_step_id,
+      canvas_step_api_id as d_canvas_step_api_id,
       campaign_name as d_campaign_name,
       canvas_name as d_canvas_name,
       id as delivered_id,
@@ -18,22 +18,22 @@ view: email_messaging_cadence {
       opens as
       (select distinct email_address as open_address,
       message_variation_api_id as o_message_variation_api_id,
-      canvas_step_id as o_canvas_step_id
+      canvas_step_api_id as o_canvas_step_api_id
       FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_OPEN_SHARED),
 
       clicks as
       (select distinct email_address as click_address,
       message_variation_api_id as c_message_variation_api_id,
-      canvas_step_id as c_canvas_step_id
+      canvas_step_api_id as c_canvas_step_api_id
       FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED)
 
       SELECT * FROM deliveries
       LEFT JOIN opens
       ON (deliveries.delivered_address)=(opens.open_address)
-      AND ((deliveries.d_message_variation_api_id)=(opens.o_message_variation_api_id) OR (deliveries.d_canvas_step_id)=(opens.o_canvas_step_id))
+      AND ((deliveries.d_message_variation_api_id)=(opens.o_message_variation_api_id) OR (deliveries.d_canvas_step_api_id)=(opens.o_canvas_step_api_id))
       LEFT JOIN clicks
       ON (deliveries.delivered_address)=(clicks.click_address)
-      AND ((deliveries.d_message_variation_api_id)=(clicks.c_message_variation_api_id) OR (deliveries.d_canvas_step_id)=(clicks.c_canvas_step_id))
+      AND ((deliveries.d_message_variation_api_id)=(clicks.c_message_variation_api_id) OR (deliveries.d_canvas_step_api_id)=(clicks.c_canvas_step_api_id))
       ;;
   }
 
@@ -52,7 +52,7 @@ view: email_messaging_cadence {
   dimension: canvas_step_id {
     description: "canvas step ID if from a canvas"
     type: string
-    sql: ${TABLE}."D_CANVAS_STEP_ID" ;;
+    sql: ${TABLE}."D_CANVAS_STEP_API_ID" ;;
   }
 
   dimension: days_since_last_received {
@@ -140,14 +140,14 @@ view: email_messaging_cadence {
     description: "distinct count of campaigns/canvases clicked per email address; may differ by less than 1% due to inability to link exact instances of emails delivered to emails clicked"
     type: number
     sql: count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_MESSAGE_VARIATION_API_ID")
-    +count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_CANVAS_STEP_ID") ;;
+    +count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_CANVAS_STEP_API_ID") ;;
   }
 
   measure: unique_opens {
     description: "distinct count of campaigns/canvases opened per email address; may differ by less than 1% due to inability to link exact instances of emails delivered to emails opened"
     type: number
     sql: count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_MESSAGE_VARIATION_API_ID")
-    +count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_CANVAS_STEP_ID") ;;
+    +count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_CANVAS_STEP_API_ID") ;;
   }
 
   measure: unique_open_rate {

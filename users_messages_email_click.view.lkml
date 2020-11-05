@@ -42,7 +42,7 @@ view: users_messages_email_click {
     description: "id of the step for this message if from a Canvas"
     hidden: yes
     type: string
-    sql: ${TABLE}."CANVAS_STEP_ID" ;;
+    sql: ${TABLE}."CANVAS_STEP_API_ID" ;;
   }
 
   dimension: canvas_variation_id {
@@ -141,7 +141,7 @@ view: users_messages_email_click {
   measure: email_unique_clicks_csid {
     type: count_distinct
     hidden: yes
-    sql: ${TABLE}."EMAIL_ADDRESS", ${TABLE}."CANVAS_STEP_ID" ;;
+    sql: ${TABLE}."EMAIL_ADDRESS", ${TABLE}."CANVAS_STEP_API_ID" ;;
   }
 
   measure: email_unique_clicks {

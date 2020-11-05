@@ -43,7 +43,7 @@ view: users_messages_pushnotification_send {
   dimension: canvas_step_id {
     description: "id of the step for this message if from a Canvas"
     type: string
-    sql: ${TABLE}."CANVAS_STEP_ID" ;;
+    sql: ${TABLE}."CANVAS_STEP_API_ID" ;;
   }
 
   dimension: canvas_variation_id {
