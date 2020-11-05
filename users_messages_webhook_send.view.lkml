@@ -1,6 +1,6 @@
 # Webhook Send Events
 view: users_messages_webhook_send {
-  sql_table_name: PUBLIC.USERS_MESSAGES_WEBHOOK_SEND ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_WEBHOOK_SEND_SHARED ;;
 
   dimension: id {
     primary_key: yes

@@ -1,6 +1,6 @@
 # iOS Foreground Events
 view: users_messages_pushnotification_iosforeground {
-  sql_table_name: PUBLIC.USERS_MESSAGES_PUSHNOTIFICATION_IOSFOREGROUND ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_IOSFOREGROUND_SHARED ;;
 
   dimension: id {
     primary_key: yes

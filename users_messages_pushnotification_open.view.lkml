@@ -1,6 +1,6 @@
 # Push Open Events
 view: users_messages_pushnotification_open {
-  sql_table_name: PUBLIC.USERS_MESSAGES_PUSHNOTIFICATION_OPEN ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_OPEN_SHARED ;;
 
   dimension: id {
     primary_key: yes

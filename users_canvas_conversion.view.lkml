@@ -1,6 +1,6 @@
 # Canvas Conversions
 view: users_canvas_conversion {
-  sql_table_name: PUBLIC.USERS_CANVAS_CONVERSION ;;
+  sql_table_name: DATALAKE_SHARING.USERS_CANVAS_CONVERSION_SHARED ;;
 
   dimension: id {
     primary_key: yes

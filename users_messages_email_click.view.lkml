@@ -1,6 +1,6 @@
 # Email Click Events
 view: users_messages_email_click {
-  sql_table_name: PUBLIC.USERS_MESSAGES_EMAIL_CLICK ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED ;;
 
   dimension: id {
     primary_key: yes

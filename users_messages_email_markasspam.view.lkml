@@ -1,6 +1,6 @@
 # Email Marked as Spam Events
 view: users_messages_email_markasspam {
-  sql_table_name: PUBLIC.USERS_MESSAGES_EMAIL_MARKASSPAM ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_EMAIL_MARKASSPAM_SHARED ;;
 
   dimension: id {
     primary_key: yes

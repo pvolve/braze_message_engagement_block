@@ -1,6 +1,6 @@
 # Newsfeed Impression Events
 view: users_behaviors_app_newsfeedimpression {
-  sql_table_name: PUBLIC.USERS_BEHAVIORS_APP_NEWSFEEDIMPRESSION ;;
+  sql_table_name: DATALAKE_SHARING.USERS_BEHAVIORS_APP_NEWSFEEDIMPRESSION_SHARED ;;
 
   dimension: id {
     primary_key: yes

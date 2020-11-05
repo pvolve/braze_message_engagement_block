@@ -1,6 +1,6 @@
 # Campaign Conversions
 view: users_campaigns_conversion {
-  sql_table_name: PUBLIC.USERS_CAMPAIGNS_CONVERSION ;;
+  sql_table_name: DATALAKE_SHARING.USERS_CAMPAIGNS_CONVERSION_SHARED ;;
 
   dimension: id {
     primary_key: yes

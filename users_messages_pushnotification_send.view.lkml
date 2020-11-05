@@ -1,6 +1,6 @@
 # Push Send Events
 view: users_messages_pushnotification_send {
-  sql_table_name: PUBLIC.USERS_MESSAGES_PUSHNOTIFICATION_SEND ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_PUSHNOTIFICATION_SEND_SHARED ;;
 
   dimension: id {
     primary_key: yes

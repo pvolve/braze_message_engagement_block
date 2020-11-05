@@ -1,6 +1,6 @@
 # Uninstall Events
 view: users_behaviors_uninstall {
-  sql_table_name: PUBLIC.USERS_BEHAVIORS_UNINSTALL ;;
+  sql_table_name: DATALAKE_SHARING.USERS_BEHAVIORS_UNINSTALL_SHARED ;;
 
   dimension: id {
     primary_key: yes

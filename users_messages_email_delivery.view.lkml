@@ -1,6 +1,6 @@
 # Email Delivery Events
 view: users_messages_email_delivery {
-  sql_table_name: PUBLIC.USERS_MESSAGES_EMAIL_DELIVERY ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_EMAIL_DELIVERY_SHARED ;;
 
   dimension: id {
     primary_key: yes

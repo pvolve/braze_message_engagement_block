@@ -1,6 +1,6 @@
 # Users Entered Canvas
 view: users_canvas_entry {
-  sql_table_name: PUBLIC.USERS_CANVAS_ENTRY ;;
+  sql_table_name: DATALAKE_SHARING.USERS_CANVAS_ENTRY_SHARED ;;
 
   dimension: id {
     primary_key: yes

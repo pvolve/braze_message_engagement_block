@@ -1,6 +1,6 @@
 # Control Group Enrollment
 view: users_campaigns_enrollincontrol {
-  sql_table_name: PUBLIC.USERS_CAMPAIGNS_ENROLLINCONTROL ;;
+  sql_table_name: DATALAKE_SHARING.USERS_CAMPAIGNS_ENROLLINCONTROL_SHARED ;;
 
   dimension: id {
     primary_key: yes

@@ -1,6 +1,6 @@
 # Email Unsubscribe Events
 view: users_messages_email_unsubscribe {
-  sql_table_name: PUBLIC.USERS_MESSAGES_EMAIL_UNSUBSCRIBE ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_EMAIL_UNSUBSCRIBE_SHARED ;;
 
   dimension: id {
     primary_key: yes

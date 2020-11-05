@@ -1,6 +1,6 @@
 # Email Bounce Events
 view: users_messages_email_bounce {
-  sql_table_name: PUBLIC.USERS_MESSAGES_EMAIL_BOUNCE ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_EMAIL_BOUNCE_SHARED ;;
 
   dimension: id {
     primary_key: yes

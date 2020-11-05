@@ -1,6 +1,6 @@
 # Newsfeed Card Click Events
 view: users_messages_newsfeedcard_click {
-  sql_table_name: PUBLIC.USERS_MESSAGES_NEWSFEEDCARD_CLICK ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_NEWSFEEDCARD_CLICK_SHARED ;;
 
   dimension: id {
     primary_key: yes

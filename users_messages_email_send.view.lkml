@@ -1,6 +1,6 @@
 # Email Send Events
 view: users_messages_email_send {
-  sql_table_name: PUBLIC.USERS_MESSAGES_EMAIL_SEND ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_EMAIL_SEND_SHARED ;;
 
   dimension: id {
     primary_key: yes

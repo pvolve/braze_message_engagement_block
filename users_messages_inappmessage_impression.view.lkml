@@ -1,6 +1,6 @@
 # In-App Message Impression Events
 view: users_messages_inappmessage_impression {
-  sql_table_name: PUBLIC.USERS_MESSAGES_INAPPMESSAGE_IMPRESSION ;;
+  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_INAPPMESSAGE_IMPRESSION_SHARED ;;
 
   dimension: id {
     primary_key: yes
