@@ -87,29 +87,29 @@ include: "push_messaging_cadence.view"
 # Dashboards
 #########################
 include: "email_funnel.dashboard"
-include: "push_funnel.dashboard"
+# include: "push_funnel.dashboard"
 include: "email_performance_dashboard.dashboard"
 include: "message_engagement_dashboard.dashboard"
 include: "email_marketing_pressure.dashboard"
-include: "push_marketing_pressure.dashboard"
+# include: "push_marketing_pressure.dashboard"
 
-#########################
+
 # Campaign Conversions Explore
 #
 # Note: Uncomment the block below when doing Campaign Conversion analytics
 #########################
-# explore: users_campaigns_conversion {
-#   label: "Campaign Conversions"
-#   view_label: "Campaign Conversions"
-#   join: users_campaigns_enrollincontrol { # only joining so we can have a "user in control" dimension--all its dimensions are hidden"
-#     view_label: "Enrolled in Control"
-#     type: left_outer
-#     relationship: many_to_one
-#     sql_on: ${users_campaigns_conversion.user_id}=${users_campaigns_enrollincontrol.user_id}
-#             AND
-#             ${users_campaigns_conversion.message_variation_id}=${users_campaigns_enrollincontrol.message_variation_id};;
-#   }
-# }
+ explore: users_campaigns_conversion {
+   label: "Campaign Conversions"
+   view_label: "Campaign Conversions"
+   join: users_campaigns_enrollincontrol { # only joining so we can have a "user in control" dimension--all its dimensions are hidden"
+     view_label: "Enrolled in Control"
+     type: left_outer
+     relationship: many_to_one
+     sql_on: ${users_campaigns_conversion.user_id}=${users_campaigns_enrollincontrol.user_id}
+             AND
+             ${users_campaigns_conversion.message_variation_id}=${users_campaigns_enrollincontrol.message_variation_id};;
+   }
+ }
 #
 #########################
 

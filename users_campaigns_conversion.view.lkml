@@ -1,6 +1,28 @@
 # Campaign Conversions
 view: users_campaigns_conversion {
-  sql_table_name: DATALAKE_SHARING.USERS_CAMPAIGNS_CONVERSION_SHARED ;;
+  derived_table: {
+    sql:
+      with conversions as (
+        select * from DATALAKE_SHARING.USERS_CAMPAIGNS_CONVERSION_SHARED
+      ),
+      campaign as (
+        select id as campaign_id,
+        name as campaign_name,
+        TO_TIMESTAMP(time) as updated_timestamp
+      from DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED
+      ),
+      joined as (
+        select conversions.*, campaign_name
+        FROM conversions
+        LEFT JOIN campaign
+        ON conversions.campaign_id = campaign.id
+        AND time >= updated_timestamp
+        qualify row_number() over (partition by conversions.id ORDER BY updated_timestamp DESC) = 1
+      )
+      select * from joined
+      ;;
+  }
+
 
   dimension: id {
     primary_key: yes

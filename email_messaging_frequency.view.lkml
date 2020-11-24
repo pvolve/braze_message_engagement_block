@@ -23,14 +23,18 @@ view: email_messaging_frequency {
                     ((deliveries.message_variation_api_id)=(clicks.message_variation_api_id)
                     OR
                     (deliveries.canvas_step_api_id)=(clicks.canvas_step_api_id))
+        LEFT JOIN DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED AS campaign ON deliveries.campaign_id = campaign.id
+          and deliveries.time >= campaign.time
       WHERE
-      {% condition campaign_name %} deliveries.campaign_name {% endcondition %}
-      AND
-      {% condition canvas_name %} deliveries.canvas_name {% endcondition %}
+      {% condition campaign_name %} campaign.campaign_name {% endcondition %}
+--      AND
+--      {[]% condition canvas_name %} deliveries.canvas_name {[]% endcondition %}
       AND
       {% condition message_variation_id %} deliveries.message_variation_api_id {% endcondition %}
-      AND
-      {% condition canvas_name %} deliveries.canvas_step_id {% endcondition %}
+--      AND
+--      {[]% condition canvas_name %} deliveries.canvas_step_id {[]% endcondition %}
+      qualify row_number() over (partition by delivered_id ORDER BY campaign.time DESC) = 1),
+
       ;;
   }
 
@@ -40,11 +44,11 @@ view: email_messaging_frequency {
     suggest_dimension: campaign_name
   }
 
-  filter: canvas_name {
-    description: "name of the canvas"
-    suggest_explore: users_messages_email_send
-    suggest_dimension: canvas_name
-  }
+  #filter: canvas_name {
+  #  description: "name of the canvas"
+  #  suggest_explore: users_messages_email_send
+  #  suggest_dimension: canvas_name
+  #}
 
   filter: canvas_step_id {
     description: "canvas step id if from a canvas"

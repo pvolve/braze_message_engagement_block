@@ -63,7 +63,7 @@
     listen:
       Date Range: email_messaging_cadence.delivery_date
       Campaign Name: email_messaging_cadence.campaign_name
-      Canvas Name: email_messaging_cadence.canvas_name
+#      Canvas Name: email_messaging_cadence.canvas_name
     row: 25
     col: 0
     width: 24
@@ -197,7 +197,7 @@
     listen:
       Date Range: email_messaging_cadence.delivery_date
       Campaign Name: email_messaging_cadence.campaign_name
-      Canvas Name: email_messaging_cadence.canvas_name
+#      Canvas Name: email_messaging_cadence.canvas_name
     row: 27
     col: 0
     width: 24
@@ -414,7 +414,7 @@
     listen:
       Date Range: email_messaging_cadence.delivery_date
       Campaign Name: email_messaging_cadence.campaign_name
-      Canvas Name: email_messaging_cadence.canvas_name
+#      Canvas Name: email_messaging_cadence.canvas_name
     row: 37
     col: 12
     width: 12
@@ -512,7 +512,7 @@
     listen:
       Date Range: email_messaging_frequency.delivered_time_date
       Campaign Name: email_messaging_frequency.campaign_name
-      Canvas Name: email_messaging_frequency.canvas_name
+#      Canvas Name: email_messaging_frequency.canvas_name
     row: 3
     col: 0
     width: 24
@@ -606,7 +606,7 @@
     listen:
       Date Range: email_messaging_frequency.delivered_time_date
       Campaign Name: email_messaging_frequency.campaign_name
-      Canvas Name: email_messaging_frequency.canvas_name
+#      Canvas Name: email_messaging_frequency.canvas_name
     row: 13
     col: 0
     width: 12
@@ -700,7 +700,7 @@
     listen:
       Date Range: email_messaging_frequency.delivered_time_date
       Campaign Name: email_messaging_frequency.campaign_name
-      Canvas Name: email_messaging_frequency.canvas_name
+#      Canvas Name: email_messaging_frequency.canvas_name
     row: 13
     col: 12
     width: 12
@@ -919,7 +919,7 @@
     listen:
       Date Range: email_messaging_cadence.delivery_date
       Campaign Name: email_messaging_cadence.campaign_name
-      Canvas Name: email_messaging_cadence.canvas_name
+#      Canvas Name: email_messaging_cadence.canvas_name
     row: 37
     col: 0
     width: 12
@@ -1003,7 +1003,7 @@
     listen:
       Date Range: users_messages_email_send.email_send_time_date
       Campaign Name: users_messages_email_send.campaign_name
-      Canvas Name: users_messages_email_send.canvas_name
+      # Canvas Name: users_messages_email_send.canvas_name
     row: 46
     col: 0
     width: 12
@@ -1087,7 +1087,7 @@
     listen:
       Date Range: users_messages_email_send.email_send_time_date
       Campaign Name: users_messages_email_send.campaign_name
-      Canvas Name: users_messages_email_send.canvas_name
+      # Canvas Name: users_messages_email_send.canvas_name
     row: 46
     col: 12
     width: 12
@@ -1109,13 +1109,13 @@
     explore: users_messages_email_send
     listens_to_filters: []
     field: users_messages_email_send.campaign_name
-  - name: Canvas Name
-    title: Canvas Name
-    type: field_filter
-    default_value: ''
-    allow_multiple_values: true
-    required: false
-    model: braze_currents_block_message_engagement
-    explore: users_messages_email_send
-    listens_to_filters: []
-    field: users_messages_email_send.canvas_name
+  #- name: Canvas Name
+  #  title: Canvas Name
+  #  type: field_filter
+  #  default_value: ''
+  #  allow_multiple_values: true
+  #  required: false
+  #  model: braze_currents_block_message_engagement
+  #  explore: users_messages_email_send
+  #  listens_to_filters: []
+  #  field: users_messages_email_send.canvas_name
