@@ -62,7 +62,7 @@
       # Canvas Name: users_messages_email_send.canvas_name
     note_state: expanded
     note_display: above
-    note_text: 'Note: use campaign name OR canvas name filters for best results.'
+    note_text: 'Note: use campaign name filters for best results.'
     row: 0
     col: 0
     width: 24
