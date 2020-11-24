@@ -110,6 +110,7 @@ include: "email_marketing_pressure.dashboard"
              ${users_campaigns_conversion.message_variation_id}=${users_campaigns_enrollincontrol.message_variation_id};;
    }
  }
+
 #
 #########################
 
@@ -210,6 +211,20 @@ explore: users_messages_email_send {
             (${users_messages_email_send.message_variation_id}=${users_messages_email_markasspam.message_variation_id}
             OR
             ${users_messages_email_send.canvas_step_id}=${users_messages_email_markasspam.canvas_step_id});;
+  }
+  join: users_campaigns_conversion {
+    view_label: "Emails Conversions"
+    type: left_outer
+    relationship: one_to_one
+    sql_on: ${users_messages_email_send.campaign_id}=${users_campaigns_conversion.campaign_id};;
+  }
+  join: users_campaigns_enrollincontrol { # only joining so we can have a "user in control" dimension--all its dimensions are hidden"
+    view_label: "Enrolled in Control"
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${users_campaigns_conversion.user_id}=${users_campaigns_enrollincontrol.user_id}
+             AND
+             ${users_campaigns_conversion.message_variation_id}=${users_campaigns_enrollincontrol.message_variation_id};;
   }
 }
 
