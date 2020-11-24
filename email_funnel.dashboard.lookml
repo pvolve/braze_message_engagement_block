@@ -78,6 +78,27 @@
     explore: users_messages_email_send
     listens_to_filters: []
     field: users_messages_email_send.campaign_name
+  - name: Open Device
+    title: Open Device
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    model: braze_currents_block_message_engagement
+    explore: users_messages_email_send
+    listens_to_filters: []
+    field: users_messages_email_open.user_agent_open
+  - name: Click Device
+    title: Click Device
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    model: braze_currents_block_message_engagement
+    explore: users_messages_email_send
+    listens_to_filters: []
+    field: users_messages_email_click.user_agent_click
+
   #- name: Canvas Name
   #  title: Canvas Name
   #  type: field_filter
