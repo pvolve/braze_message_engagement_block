@@ -1,6 +1,27 @@
 # Email Send Events
 view: users_messages_email_send {
-  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_EMAIL_SEND_SHARED ;;
+  derived_table: {
+    sql:
+      with sends as (
+        select * from DATALAKE_SHARING.USERS_MESSAGES_EMAIL_SEND_SHARED
+      ),
+      campaign as (
+        select id as campaign_id,
+        name as campaign_name,
+        time as updated_timestamp
+      from DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED
+      ),
+      joined as (
+        select sends.*, campaign_name
+        FROM sends
+        LEFT JOIN campaign
+        ON sends.campaign_id = campaign.campaign_id
+        AND time >= updated_timestamp
+        qualify row_number() over (partition by sends.id ORDER BY updated_timestamp DESC) = 1
+      )
+      select * from joined
+      ;;
+  }
 
   dimension: id {
     primary_key: yes
@@ -21,6 +42,7 @@ view: users_messages_email_send {
     type: string
     sql: ${TABLE}."CAMPAIGN_NAME" ;;
   }
+
 
   dimension: canvas_id {
     description: "id of the canvas if from a canvas"

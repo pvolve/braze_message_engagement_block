@@ -6,7 +6,8 @@ view: email_messaging_cadence {
       email_address AS delivered_address,
       message_variation_api_id as d_message_variation_api_id,
       canvas_step_api_id as d_canvas_step_api_id,
-      campaign_name as d_campaign_name,
+      campaign_id as d_campaign_id,
+      campaign_api_id as d_campaign_api_id
       canvas_name as d_canvas_name,
       id as delivered_id,
       rank() over (partition by delivered_address order by delivered_timestamp asc) as delivery_event,
@@ -25,7 +26,14 @@ view: email_messaging_cadence {
       (select distinct email_address as click_address,
       message_variation_api_id as c_message_variation_api_id,
       canvas_step_api_id as c_canvas_step_api_id
-      FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED)
+      FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED),
+
+      campaign as (
+        select id as campaign_id,
+        name as campaign_name,
+        time as updated_timestamp
+      from DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED
+      ),
 
       SELECT * FROM deliveries
       LEFT JOIN opens
@@ -34,24 +42,10 @@ view: email_messaging_cadence {
       LEFT JOIN clicks
       ON (deliveries.delivered_address)=(clicks.click_address)
       AND ((deliveries.d_message_variation_id)=(clicks.c_message_variation_id) OR (deliveries.d_canvas_step_id)=(clicks.c_canvas_step_id))
+      LEFT JOIN campaign
+      ON (deliveries.campaign_id)=(campaign.campaign_id)
       ;;
   }
-
-      # campaign_join as
-      # (select deliveries.*, campaign_name
-      # FROM deliveries
-      # LEFT JOIN campaign
-      # ON deliveries.campaign_id = campaign.campaign_id
-      # AND delivered_timestamp >= updated_timestamp
-      # qualify row_number() over (partition by delivered_id ORDER BY updated_timestamp DESC) = 1),
-
-      # SELECT * FROM campaign_join
-      # LEFT JOIN opens
-      # ON (campaign_join.delivered_address)=(opens.open_address)
-      # AND ((campaign_join.d_message_variation_api_id)=(opens.o_message_variation_api_id) OR (campaign_join.d_canvas_step_api_id)=(opens.o_canvas_step_api_id))
-      # LEFT JOIN clicks
-      # ON (campaign_join.delivered_address)=(clicks.click_address)
-      # AND ((campaign_join.d_message_variation_api_id)=(clicks.c_message_variation_api_id) OR (campaign_join.d_canvas_step_api_id)=(clicks.c_canvas_step_api_id))
 
 
   dimension: campaign_name {
