@@ -1,6 +1,36 @@
 # Email Click Events
 view: users_messages_email_click {
-  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED ;;
+  derived_table: {
+    sql:
+      with clicks as (
+        select * from DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED
+      ),
+      campaign as (
+        select id as campaign_id,
+        name as c_campaign_name,
+        time as campaign_updated_timestamp
+      from DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED
+      ),
+      canvas as (
+        select id as canvas_id,
+        name as c_canvas_name,
+        time as canvas_updated_timestamp
+      from DATALAKE_SHARING.CHANGELOGS_CANVAS_SHARED
+      ),
+      joined as (
+        select clicks.*, c_campaign_name, c_canvas_name
+        FROM clicks
+        LEFT JOIN campaign
+          ON clicks.campaign_id = campaign.campaign_id
+          AND time >= campaign_updated_timestamp
+        LEFT JOIN canvas
+          ON clicks.canvas_id = canvas.canvas_id
+          and time >= canvas_updated_timestamp
+        qualify row_number() over (partition by deliveries.id ORDER BY campaign_updated_timestamp, canvas_updated_timestamp DESC) = 1
+      )
+      select * from joined
+      ;;
+}
 
   dimension: id {
     primary_key: yes

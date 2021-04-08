@@ -1,6 +1,36 @@
 # Email Open Events
 view: users_messages_email_open {
-  sql_table_name: DATALAKE_SHARING.USERS_MESSAGES_EMAIL_OPEN_SHARED ;;
+  derived_table: {
+    sql:
+      with opens as (
+        select * from DATALAKE_SHARING.USERS_MESSAGES_EMAIL_OPEN_SHARED
+      ),
+      campaign as (
+        select id as campaign_id,
+        name as campaign_name,
+        time as campaign_updated_timestamp
+      from DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED
+      ),
+      canvas as (
+        select id as canvas_id,
+        name as canvas_name,
+        time as canvas_updated_timestamp
+      from DATALAKE_SHARING.CHANGELOGS_CANVAS_SHARED
+      ),
+      joined as (
+        select opens.*, campaign_name, canvas_name
+        FROM opens
+        LEFT JOIN campaign
+          ON opens.campaign_id = campaign.campaign_id
+          AND time >= campaign_updated_timestamp
+        LEFT JOIN canvas
+          ON opens.canvas_id = canvas.canvas_id
+          and time >= canvas_updated_timestamp
+        qualify row_number() over (partition by opens.id ORDER BY campaign_updated_timestamp, canvas_updated_timestamp DESC) = 1
+      )
+      select * from joined
+      ;;
+}
 
   dimension: id {
     primary_key: yes

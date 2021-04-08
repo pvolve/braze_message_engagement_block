@@ -11,7 +11,9 @@ view: email_messaging_frequency {
         opens.canvas_step_api_id as opened_cs_id,
         clicks.email_address as clicked_address,
         clicks.message_variation_api_id as clicked_mv_id,
-        clicks.canvas_step_api_id as clicked_cs_id
+        clicks.canvas_step_api_id as clicked_cs_id,
+        campaign.name as campaign_name,
+        canvas.name as canvas_name
         FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_DELIVERY_SHARED  AS deliveries
         LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_EMAIL_OPEN_SHARED  AS opens ON (deliveries.email_address)=(opens.email_address)
                     AND
@@ -25,15 +27,17 @@ view: email_messaging_frequency {
                     (deliveries.canvas_step_api_id)=(clicks.canvas_step_api_id))
         LEFT JOIN DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED AS campaign ON deliveries.campaign_id = campaign.id
           and deliveries.time >= campaign.time
+        LEFT JOIN DATALAKE_SHARING.CHANGELOGS_CANVAS_SHARED as canvas on deliveries.canvas_id = canvas.id
+          and deliveries.time >= canvas.time
       WHERE
-      {% condition campaign_name %} campaign.campaign_name {% endcondition %}
---      AND
---      {[]% condition canvas_name %} deliveries.canvas_name {[]% endcondition %}
+      {% condition campaign_name %} campaign.name {% endcondition %}
+      AND
+      {% condition canvas_name %} canvas_name {% endcondition %}
       AND
       {% condition message_variation_id %} deliveries.message_variation_api_id {% endcondition %}
 --      AND
---      {[]% condition canvas_name %} deliveries.canvas_step_id {[]% endcondition %}
-      qualify row_number() over (partition by delivered_id ORDER BY campaign.time DESC) = 1)
+--      {% condition canvas_name %} deliveries.canvas_step_id {% endcondition %}
+      qualify row_number() over (partition by delivered_id ORDER BY campaign.time, canvas.time DESC) = 1)
       ;;
   }
 
@@ -43,17 +47,17 @@ view: email_messaging_frequency {
     suggest_dimension: campaign_name
   }
 
-  #filter: canvas_name {
-  #  description: "name of the canvas"
-  #  suggest_explore: users_messages_email_send
-  #  suggest_dimension: canvas_name
-  #}
-
-  filter: canvas_step_id {
-    description: "canvas step id if from a canvas"
+  filter: canvas_name {
+    description: "name of the canvas"
     suggest_explore: users_messages_email_send
-    suggest_dimension: canvas_step_id
+    suggest_dimension: canvas_name
   }
+
+  # filter: canvas_step_id {
+  #   description: "canvas step id if from a canvas"
+  #   suggest_explore: users_messages_email_send
+  #   suggest_dimension: canvas_step_id
+  # }
 
   filter: message_variation_id {
     description: "message variation id if from a campaign"
