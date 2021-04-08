@@ -8,16 +8,25 @@ view: users_messages_email_send {
       campaign as (
         select id as campaign_id,
         name as campaign_name,
-        time as updated_timestamp
+        time as campaign_updated_timestamp
       from DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED
       ),
+      canvas as (
+        select id as canvas_id,
+        name as canvas_name,
+        time as canvas_updated_timestamp
+      from DATALAKE_SHARING.CHANGELOGS_CANVAS_SHARED
+      ),
       joined as (
-        select sends.*, campaign_name
+        select sends.*, campaign_name, canvas_name
         FROM sends
         LEFT JOIN campaign
-        ON sends.campaign_id = campaign.campaign_id
-        AND time >= updated_timestamp
-        qualify row_number() over (partition by sends.id ORDER BY updated_timestamp DESC) = 1
+          ON sends.campaign_id = campaign.campaign_id
+          AND time >= campaign_updated_timestamp
+        LEFT JOIN canvas
+          ON sends.canvas_id = canvas.canvas_id
+          and time >= canvas_updated_timestamp
+        qualify row_number() over (partition by sends.id ORDER BY campaign_updated_timestamp DESC) = 1
       )
       select * from joined
       ;;
@@ -42,7 +51,6 @@ view: users_messages_email_send {
     type: string
     sql: ${TABLE}."CAMPAIGN_NAME" ;;
   }
-
 
   dimension: canvas_id {
     description: "id of the canvas if from a canvas"
