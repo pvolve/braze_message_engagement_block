@@ -41,7 +41,7 @@ view: email_messaging_cadence {
       from DATALAKE_SHARING.CHANGELOGS_CANVAS_SHARED
       )
 
-      SELECT deliveries.*, campaign_name, canvas_name FROM deliveries
+      SELECT deliveries.*, clicks.*, opens.*, campaign_name, canvas_name FROM deliveries
       LEFT JOIN opens
       ON (deliveries.delivered_address)=(opens.open_address)
       AND ((deliveries.d_message_variation_api_id)=(opens.o_message_variation_api_id) OR (deliveries.d_canvas_step_api_id)=(opens.o_canvas_step_api_id))
@@ -50,10 +50,10 @@ view: email_messaging_cadence {
       AND ((deliveries.d_message_variation_api_id)=(clicks.c_message_variation_api_id) OR (deliveries.d_canvas_step_api_id)=(clicks.c_canvas_step_api_id))
       LEFT JOIN campaign
         ON (deliveries.d_campaign_id)=(campaign.campaign_id)
-        AND (deliveries.delivered_timestamp)>= (campaign.updated_timestamp)
+--        AND (deliveries.delivered_timestamp)>= (campaign.updated_timestamp)
       LEFT JOIN canvas
         ON (deliveries.d_canvas_id)=(canvas.canvas_id)
-        AND (deliveries.delivered_timestamp)>= (canvas.updated_timestamp)
+--        AND (deliveries.delivered_timestamp)>= (canvas.updated_timestamp)
       qualify row_number() over (partition by deliveries.delivered_id ORDER BY campaign.updated_timestamp, canvas.updated_timestamp DESC) = 1
       ;;
   }
@@ -107,7 +107,7 @@ view: email_messaging_cadence {
   dimension: message_variation_id {
     description: "message variation ID if from a campaign"
     type: string
-    sql: ${TABLE}."D_MESSAGE_VARIATION_ID" ;;
+    sql: ${TABLE}."D_MESSAGE_VARIATION_API_ID" ;;
   }
 
   dimension_group: delivery {
@@ -160,15 +160,15 @@ view: email_messaging_cadence {
   measure: unique_clicks {
     description: "distinct count of campaigns/canvases clicked per email address; may differ by less than 1% due to inability to link exact instances of emails delivered to emails clicked"
     type: number
-    sql: count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_MESSAGE_VARIATION_ID")
-      +count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_CANVAS_STEP_ID") ;;
+    sql: count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_MESSAGE_VARIATION_API_ID")
+      +count(distinct ${TABLE}."CLICK_ADDRESS", ${TABLE}."C_CANVAS_STEP_API_ID") ;;
   }
 
   measure: unique_opens {
     description: "distinct count of campaigns/canvases opened per email address; may differ by less than 1% due to inability to link exact instances of emails delivered to emails opened"
     type: number
-    sql: count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_MESSAGE_VARIATION_ID")
-      +count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_CANVAS_STEP_ID") ;;
+    sql: count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_MESSAGE_VARIATION_API_ID")
+      +count(distinct ${TABLE}."OPEN_ADDRESS", ${TABLE}."O_CANVAS_STEP_API_ID") ;;
   }
 
   measure: unique_open_rate {

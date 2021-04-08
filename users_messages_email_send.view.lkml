@@ -22,10 +22,8 @@ view: users_messages_email_send {
         FROM sends
         LEFT JOIN campaign
           ON sends.campaign_id = campaign.campaign_id
-          AND time >= campaign_updated_timestamp
         LEFT JOIN canvas
           ON sends.canvas_id = canvas.canvas_id
-          and time >= canvas_updated_timestamp
         qualify row_number() over (partition by sends.id ORDER BY campaign_updated_timestamp, canvas_updated_timestamp DESC) = 1
       )
       select * from joined
