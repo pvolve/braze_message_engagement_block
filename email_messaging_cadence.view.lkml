@@ -55,6 +55,7 @@ view: email_messaging_cadence {
       LEFT JOIN canvas
         ON (deliveries.canvas_id)=(canvas.canvas_id)
         AND (deliveries.delivered_timestamp)>= (canvas.updated_timestamp)
+      qualify row_number() over (partition by sends.id ORDER BY campaign_updated_timestamp, canvas_updated_timestamp DESC) = 1
       ;;
   }
 
