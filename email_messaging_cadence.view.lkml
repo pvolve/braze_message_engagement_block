@@ -15,29 +15,35 @@ view: email_messaging_cadence {
       datediff(week, lag(delivered_timestamp) over (partition by delivered_address order by delivered_timestamp asc), delivered_timestamp) as diff_weeks
       from DATALAKE_SHARING.USERS_MESSAGES_EMAIL_DELIVERY_SHARED group by 1,2,3,4,5,6,7),
 
-      opens as
-      (select distinct email_address as open_address,
-      message_variation_api_id as o_message_variation_api_id,
-      canvas_step_api_id as o_canvas_step_api_id
-      FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_OPEN_SHARED),
+      opens as (
+        select
+          distinct email_address as open_address,
+          message_variation_api_id as o_message_variation_api_id,
+          canvas_step_api_id as o_canvas_step_api_id
+      FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_OPEN_SHARED
+      ),
 
-      clicks as
-      (select distinct email_address as click_address,
-      message_variation_api_id as c_message_variation_api_id,
-      canvas_step_api_id as c_canvas_step_api_id
-      FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED),
+      clicks as (
+        select
+          distinct email_address as click_address,
+          message_variation_api_id as c_message_variation_api_id,
+          canvas_step_api_id as c_canvas_step_api_id
+      FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_CLICK_SHARED
+      ),
 
-      campaign as
-      ( select id as campaign_id,
-        name as campaign_name,
-        time as updated_timestamp
+      campaign as (
+        select
+          id as campaign_id,
+          name as campaign_name,
+          time as updated_timestamp
       from DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED
       ),
 
-      canvas as
-      ( select id as canvas_id,
-        name as canvas_name,
-        time as updated_timestamp
+      canvas as (
+        select
+          id as canvas_id,
+          name as canvas_name,
+          time as updated_timestamp
       from DATALAKE_SHARING.CHANGELOGS_CANVAS_SHARED
       )
 
@@ -50,10 +56,8 @@ view: email_messaging_cadence {
       AND ((deliveries.d_message_variation_api_id)=(clicks.c_message_variation_api_id) OR (deliveries.d_canvas_step_api_id)=(clicks.c_canvas_step_api_id))
       LEFT JOIN campaign
         ON (deliveries.d_campaign_id)=(campaign.campaign_id)
---        AND (deliveries.delivered_timestamp)>= (campaign.updated_timestamp)
       LEFT JOIN canvas
         ON (deliveries.d_canvas_id)=(canvas.canvas_id)
---        AND (deliveries.delivered_timestamp)>= (canvas.updated_timestamp)
       qualify row_number() over (partition by deliveries.delivered_id ORDER BY campaign.updated_timestamp, canvas.updated_timestamp DESC) = 1
       ;;
   }

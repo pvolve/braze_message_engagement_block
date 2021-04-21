@@ -30,14 +30,12 @@ view: email_messaging_frequency {
         LEFT JOIN DATALAKE_SHARING.CHANGELOGS_CANVAS_SHARED as canvas on deliveries.canvas_id = canvas.id
           and deliveries.time >= canvas.time
       WHERE
-      {% condition campaign_name %} campaign.name {% endcondition %}
+      {% condition campaign_name %} campaign_name {% endcondition %}
       AND
       {% condition canvas_name %} canvas_name {% endcondition %}
       AND
       {% condition message_variation_id %} deliveries.message_variation_api_id {% endcondition %}
---      AND
---      {% condition canvas_name %} deliveries.canvas_step_id {% endcondition %}
-      qualify row_number() over (partition by delivered_id ORDER BY campaign.time, canvas.time DESC) = 1)
+      qualify row_number() over (partition by delivered_id ORDER BY  canvas.time, campaign.time DESC) = 1)
       ;;
   }
 

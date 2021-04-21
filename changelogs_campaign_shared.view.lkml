@@ -30,7 +30,7 @@ view: changelogs_campaign_shared {
   }
 
   dimension: time {
-    type: number
+    type: date_time
     sql: ${TABLE}."TIME" ;;
   }
 
