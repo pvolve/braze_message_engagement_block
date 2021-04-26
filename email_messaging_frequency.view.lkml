@@ -11,7 +11,9 @@ view: email_messaging_frequency {
         opens.canvas_step_api_id as opened_cs_id,
         clicks.email_address as clicked_address,
         clicks.message_variation_api_id as clicked_mv_id,
-        clicks.canvas_step_api_id as clicked_cs_id
+        clicks.canvas_step_api_id as clicked_cs_id,
+        campaign.name as campaign_name,
+        canvas.name as canvas_name
         FROM DATALAKE_SHARING.USERS_MESSAGES_EMAIL_DELIVERY_SHARED  AS deliveries
         LEFT JOIN DATALAKE_SHARING.USERS_MESSAGES_EMAIL_OPEN_SHARED  AS opens ON (deliveries.email_address)=(opens.email_address)
                     AND
@@ -25,44 +27,44 @@ view: email_messaging_frequency {
                     (deliveries.canvas_step_api_id)=(clicks.canvas_step_api_id))
         LEFT JOIN DATALAKE_SHARING.CHANGELOGS_CAMPAIGN_SHARED AS campaign ON deliveries.campaign_id = campaign.id
           and deliveries.time >= campaign.time
+        LEFT JOIN DATALAKE_SHARING.CHANGELOGS_CANVAS_SHARED as canvas on deliveries.canvas_id = canvas.id
+          and deliveries.time >= canvas.time
       WHERE
-      {% condition campaign_name %} campaign.campaign_name {% endcondition %}
---      AND
---      {[]% condition canvas_name %} deliveries.canvas_name {[]% endcondition %}
+      {% condition campaign_name %} campaign_name {% endcondition %}
+      AND
+      {% condition canvas_name %} canvas_name {% endcondition %}
       AND
       {% condition message_variation_id %} deliveries.message_variation_api_id {% endcondition %}
---      AND
---      {[]% condition canvas_name %} deliveries.canvas_step_id {[]% endcondition %}
-      qualify row_number() over (partition by delivered_id ORDER BY campaign.time DESC) = 1)
+      qualify row_number() over (partition by delivered_id ORDER BY  canvas.time, campaign.time DESC) = 1)
       ;;
   }
 
   filter: campaign_name {
-    description: "name of the campaign"
+    description: "Campaign name"
     suggest_explore: users_messages_email_send
     suggest_dimension: campaign_name
   }
 
-  #filter: canvas_name {
-  #  description: "name of the canvas"
-  #  suggest_explore: users_messages_email_send
-  #  suggest_dimension: canvas_name
-  #}
-
-  filter: canvas_step_id {
-    description: "canvas step id if from a canvas"
+  filter: canvas_name {
+    description: "Canvas name"
     suggest_explore: users_messages_email_send
-    suggest_dimension: canvas_step_id
+    suggest_dimension: canvas_name
   }
 
+  # filter: canvas_step_id {
+  #   description: "canvas step id if from a canvas"
+  #   suggest_explore: users_messages_email_send
+  #   suggest_dimension: canvas_step_id
+  # }
+
   filter: message_variation_id {
-    description: "message variation id if from a campaign"
+    description: "Message variation id if from a campaign"
     suggest_explore: users_messages_email_send
     suggest_dimension: message_variation_id
   }
 
   parameter: date_granularity {
-    description: "specify daily, weekly or monthly marketing pressure"
+    description: "Specify daily, weekly or monthly marketing pressure"
     type: string
     default_value: "day"
     allowed_value: {
@@ -77,7 +79,8 @@ view: email_messaging_frequency {
   }
 
   dimension_group: delivered_time {
-    description: "time the email was delivered (UTC)"
+    description: "Time email was delivered (UTC)"
+    label: "Delivered Time (UTC)"
     type: time
     timeframes: [hour_of_day,
       date,
@@ -89,87 +92,85 @@ view: email_messaging_frequency {
   }
 
   dimension: email_address {
-    description: "email address of the user"
+    description: "Email address of the user"
     type: string
     sql: ${TABLE}."DELIVERED_ADDRESS" ;;
   }
 
   dimension: frequency {
-    description: "number of emails sent per date granularity (day/week/month)"
+    description: "Number of emails sent per (day/week/month)"
     type: number
     sql: ${TABLE}."FREQUENCY" ;;
   }
 
   measure: emails_delivered {
-    description: "count of unique delivery event IDs"
+    description: "Unique email delivery events"
     type: sum
     sql: CASE WHEN rank=1 then ${frequency} else null end ;;
   }
 
   measure: unique_opens_mvid {
-    description: "unique opens corresponding to message variations"
+    description: "Unique opens corresponding to message variations"
     type: count_distinct
     hidden: yes
     sql: ${TABLE}."OPENED_ADDRESS", ${TABLE}."OPENED_MV_ID" ;;
   }
 
   measure: unique_opens_csid {
-    description: "unique opens corresponding to canvas steps"
+    description: "Unique opens corresponding to canvas steps"
     type: count_distinct
     hidden: yes
     sql: ${TABLE}."OPENED_ADDRESS", ${TABLE}."OPENED_CS_ID" ;;
   }
 
   measure: unique_clicks_mvid {
-    description: "unique clicks corresponding to message variations"
+    description: "Unique clicks corresponding to message variations"
     type: count_distinct
     hidden: yes
     sql: ${TABLE}."CLICKED_ADDRESS", ${TABLE}."CLICKED_MV_ID" ;;
   }
 
   measure: unique_clicks_csid {
-    description: "unique clicks corresponding to canvas steps"
+    description: "Unique clicks corresponding to canvas steps"
     type: count_distinct
     hidden: yes
     sql: ${TABLE}."CLICKED_ADDRESS", ${TABLE}."CLICKED_CS_ID" ;;
   }
 
   measure: unique_opens {
-    description: "distinct count of times a recipient opened an email campaign or canvas (does not count the same person opening the same campaign or canvas more than once);
-    expected behavior is for this measure to deviate from actual by less than 1% because of limitations on linking specific instances of emails delivered to emails opened"
+    description: "Times a recipient opened an email campaign or canvas (does not count the same person opening the same campaign or canvas more than once)"
     type: number
     sql: COALESCE(${unique_opens_mvid},0)+COALESCE(${unique_opens_csid},0);;
   }
 
   measure: unique_clicks {
-    description: "distinct count of times a recipient opened an email campaign or canvas (does not count the same person opening the same campaign or canvas more than once);
-    expected behavior is for this measure to deviate from actual by less than 1% because of limitations on linking specific instances of emails delivered to emails clicked"
+    description: "Times a recipient opened an email campaign or canvas (does not count the same person opening the same campaign or canvas more than once)"
     type: number
     sql: COALESCE(${unique_clicks_mvid},0)+COALESCE(${unique_clicks_csid},0) ;;
   }
 
   measure: delivery_occasions {
-    description: "occasions a certain frequency of emails was sent to a user per date granularity"
+    description: "Occasions certain frequency of emails was sent to a user by date granularity"
     type: number
     sql: COUNT(CASE WHEN rank=1 then ${frequency} else null end) ;;
   }
 
   measure: unique_click_rate {
-    description: "email unique clicks/emails delivered"
+    description: "Unique clicks/emails delivered"
     type: number
     value_format_name: percent_2
     sql: ${unique_clicks}/NULLIF(${emails_delivered},0) ;;
   }
 
   measure: unique_open_rate {
-    description: "email unique opens/emails delivered"
+    description: "Unique opens/emails delivered"
     type: number
     value_format_name: percent_2
     sql: ${unique_opens}/NULLIF(${emails_delivered},0) ;;
   }
 
   measure: unique_recipients {
-    description: "distinct count of email addresses that received an email campaign"
+    description: "Unique email addresses that received an email campaign"
     type: count_distinct
     sql: ${TABLE}."DELIVERED_ADDRESS" ;;
   }

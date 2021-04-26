@@ -99,14 +99,14 @@ view: users_messages_email_bounce {
   }
 
   dimension: send_id {
-    description: "id of the message if specified for the campaign (See Send Identifier under REST API Parameter Definitions)"
+    description: "ID of message if specified for the campaign (See Send Identifier under REST API Parameter Definitions)"
     hidden: yes
     type: string
     sql: ${TABLE}."SEND_ID" ;;
   }
 
   dimension: sending_ip_bounce {
-    description: "the IP address from which the message was sent (only use for email bounce measures)"
+    description: "IP address from which the message was sent (only use for email bounce measures)"
     hidden: yes
     type: string
     drill_fields: [campaign_name, campaign_id, message_variation_id,canvas_step_id]
@@ -114,20 +114,20 @@ view: users_messages_email_bounce {
   }
 
   dimension: user_id {
-    description: "Braze id of the user"
+    description: "Braze ID of the user"
     hidden: yes
     type: string
     sql: ${TABLE}."USER_ID" ;;
   }
 
   measure: email_bounces {
-    description: "distinct count of email bounce event IDs"
+    description: "Count of email bounces"
     type: count_distinct
     sql: ${TABLE}."ID" ;;
   }
 
   measure: email_bounce_rate {
-    description: "email (hard) bounces/emails sent--may be over 100% at the user level"
+    description: "Count of (hard) bounces/emails sent--may be over 100% at the user level"
     type: number
     value_format_name: percent_2
     sql: ${email_bounces}/NULLIF(${users_messages_email_send.emails_sent},0) ;;
